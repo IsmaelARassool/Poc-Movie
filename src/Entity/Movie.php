@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -29,6 +31,10 @@ class Movie
     #[ORM\ManyToOne(targetEntity: Productor::class, inversedBy: 'movies')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Productor $productor = null;
+
+    #[ORM\ManyToMany(targetEntity: Category::class)]
+    #[ORM\JoinTable(name: 'movie_category')]
+    private Collection $categories;
 
     public function getId(): ?int
     {
@@ -79,6 +85,30 @@ class Movie
     public function setProductor(?Productor $productor): static
     {
         $this->productor = $productor;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Category[]
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        $this->categories->removeElement($category);
 
         return $this;
     }
