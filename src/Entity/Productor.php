@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -25,6 +27,9 @@ class Productor
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $birthday = null;
+
+    #[ORM\OneToMany(mappedBy: 'productor', targetEntity: Movie::class, orphanRemoval: true)]
+    private Collection $movies;
 
     public function getId(): ?int
     {
@@ -63,6 +68,36 @@ class Productor
     public function setBirthday(\DateTimeInterface $birthday): static
     {
         $this->birthday = $birthday;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Movie[]
+     */
+    public function getMovies(): Collection
+    {
+        return $this->movies;
+    }
+
+    public function addMovie(Movie $movie): static
+    {
+        if (!$this->movies->contains($movie)) {
+            $this->movies[] = $movie;
+            $movie->setProductor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMovie(Movie $movie): static
+    {
+        if ($this->movies->removeElement($movie)) {
+            // set the owning side to null (unless already changed)
+            if ($movie->getProductor() === $this) {
+                $movie->setProductor(null);
+            }
+        }
 
         return $this;
     }

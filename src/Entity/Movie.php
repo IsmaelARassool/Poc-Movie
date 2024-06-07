@@ -26,6 +26,10 @@ class Movie
     #[ORM\Column(length: 180)]
     private ?string $synopsis = null;
 
+    #[ORM\ManyToOne(targetEntity: Productor::class, inversedBy: 'movies')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Productor $productor = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -63,6 +67,18 @@ class Movie
     public function setSynopsis(string $synopsis): static
     {
         $this->synopsis = $synopsis;
+
+        return $this;
+    }
+
+    public function getProductor(): ?Productor
+    {
+        return $this->productor;
+    }
+
+    public function setProductor(?Productor $productor): static
+    {
+        $this->productor = $productor;
 
         return $this;
     }
