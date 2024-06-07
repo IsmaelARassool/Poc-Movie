@@ -13,7 +13,7 @@ class ProductorRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, User::class);
+        parent::__construct($registry, Productor::class);
     }
 
     public function add(Productor $entity, bool $flush = false): void

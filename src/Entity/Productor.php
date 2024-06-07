@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ProductorRepository::class)]
-#[ORM\Table(name: '`Productor`')]
+#[ORM\Table(name: '`productor`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_NAME', fields: ['name','firstname'])]
 #[UniqueEntity(fields: ['name','firstname'], message: 'There is already productor with this name and firstname')]
 class Productor

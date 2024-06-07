@@ -13,7 +13,7 @@ class CategoryRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, User::class);
+        parent::__construct($registry, Category::class);
     }
 
     public function add(Category $entity, bool $flush = false): void
