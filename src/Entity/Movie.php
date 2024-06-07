@@ -2,6 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\Interfaces\IdInterface;
+use App\Entity\Interfaces\TitleInterface;
+use App\Entity\Traits\IdTrait;
+use App\Entity\Traits\TitleTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -12,15 +16,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\Table(name: '`movie`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_TITLE', fields: ['title'])]
 #[UniqueEntity(fields: ['title'], message: 'There is already a movie with this name')]
-class Movie
+class Movie implements IdInterface, TitleInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $title = null;
+    use IdTrait;
+    use TitleTrait;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $releaseAt = null;
@@ -35,23 +34,6 @@ class Movie
     #[ORM\ManyToMany(targetEntity: Category::class)]
     #[ORM\JoinTable(name: 'movie_category')]
     private Collection $categories;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): static
-    {
-        $this->title = $title;
-
-        return $this;
-    }
 
     public function getReleaseAt(): ?\DateTimeInterface
     {

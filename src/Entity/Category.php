@@ -2,6 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\Interfaces\IdInterface;
+use App\Entity\Interfaces\TitleInterface;
+use App\Entity\Traits\IdTrait;
+use App\Entity\Traits\TitleTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -9,30 +13,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\Table(name: '`category`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_TITLE', fields: ['title'])]
 #[UniqueEntity(fields: ['title'], message: 'There is already category with this title')]
-class Category
+class Category implements IdInterface, TitleInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column(length: 30)]
-    private ?string $title = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): static
-    {
-        $this->title = $title;
-
-        return $this;
-    }
+    use IdTrait;
+    use TitleTrait;
 }

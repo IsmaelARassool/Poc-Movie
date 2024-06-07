@@ -2,6 +2,12 @@
 
 namespace App\Entity;
 
+use App\Entity\Interfaces\FirstnameInterface;
+use App\Entity\Interfaces\IdInterface;
+use App\Entity\Interfaces\NameInterface;
+use App\Entity\Traits\FirstnameTrait;
+use App\Entity\Traits\IdTrait;
+use App\Entity\Traits\NameTrait;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -12,12 +18,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements FirstnameInterface, IdInterface, NameInterface, UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    use IdTrait;
+    use NameTrait;
+    use FirstnameTrait;
 
     #[ORM\Column(length: 180)]
     private ?string $email = null;
@@ -40,11 +45,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getEmail(): ?string
     {
         return $this->email;
@@ -53,30 +53,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    public function getFirstName(): ?string
-    {
-        return $this->firstname;
-    }
-
-    public function setFirstName(string $firstname): static
-    {
-        $this->firstname = $firstname;
-
-        return $this;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
 
         return $this;
     }
