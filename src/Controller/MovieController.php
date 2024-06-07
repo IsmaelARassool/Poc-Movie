@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class MovieController extends AbstractController
 {
     #[Route('/movies', name: 'movies')]
+    #[IsGranted('ROLE_ADMIN')]
     public function movie(): Response
     {
         return $this->render('movies/movie.html.twig');
