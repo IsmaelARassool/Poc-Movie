@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CRUD Movie{% endblock %}
+
+{% block body %}
+    <h1>Movies</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Date de sortie</th>
+                <th>Synopsis</th>
+                <th>Producteur</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for movie in movies %}
+                    <td>{{ movie.id }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for movie in movies %}
+                    <td>{{ movie.title }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for movie in movies %}
+                    <td>{{ movie.releaseat|date('Y-m-d') }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for movie in movies %}
+                    <td>{{ movie.synopsis }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for movie in movies %}
+                    <td>{{ movie.productor }}</td>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
