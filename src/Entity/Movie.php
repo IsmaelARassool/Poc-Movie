@@ -6,6 +6,7 @@ use App\Entity\Interfaces\IdInterface;
 use App\Entity\Interfaces\TitleInterface;
 use App\Entity\Traits\IdTrait;
 use App\Entity\Traits\TitleTrait;
+use App\Repository\MovieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -34,6 +35,11 @@ class Movie implements IdInterface, TitleInterface
     #[ORM\ManyToMany(targetEntity: Category::class)]
     #[ORM\JoinTable(name: 'movie_category')]
     private Collection $categories;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
 
     public function getReleaseAt(): ?\DateTimeInterface
     {

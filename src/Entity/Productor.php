@@ -8,6 +8,7 @@ use App\Entity\Interfaces\NameInterface;
 use App\Entity\Traits\FirstnameTrait;
 use App\Entity\Traits\IdTrait;
 use App\Entity\Traits\NameTrait;
+use App\Repository\ProductorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;

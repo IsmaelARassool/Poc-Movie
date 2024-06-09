@@ -6,6 +6,7 @@ use App\Entity\Interfaces\IdInterface;
 use App\Entity\Interfaces\TitleInterface;
 use App\Entity\Traits\IdTrait;
 use App\Entity\Traits\TitleTrait;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
