@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CRUD Movie{% endblock %}
+
+{% block body %}
+    <h1>Movies</h1>
+    <a href={{ path('movies_add') }}>Rajouter un film</a>
+
+    {{ form_start(form) }}
+        {{ form_row(form.title) }}
+        <button type="submit">Afficher</button>
+    {{ form_end(form) }}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Date de sortie</th>
+                <th>Synopsis</th>
+                <th>Producteur</th>
+                <th>Catégorie</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for movie in pagination %}
+                <tr>
+                    <td>{{ movie.id }}</td>
+                    <td>{{ movie.title }}</td>
+                    <td>{{ movie.releaseat|date('d-m-Y') }}</td>
+                    <td>{{ movie.synopsis }}</td>
+                    <td>{{ movie.productor.firstname }} {{ movie.productor.name }}</td>
+                    <td>{% for categorie in movie.categories %}
+                        {{ categorie.title }},
+                    {% endfor %}
+                    <td>
+                        <a href="{{ path('movies_modify', {'id': movie.id}) }}">Modifier</a>
+                        <a href="{{ path('movies_delete', {'id': movie.id}) }}" 
+                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce film ?');">Supprimer</a>
+                        <a href="{{ path('movies_view', {'id': movie.id}) }}">Voir</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="pagination">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+{% endblock %}

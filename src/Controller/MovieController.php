@@ -36,7 +36,7 @@ class MovieController extends AbstractController
     }
 
     #[Route('/movies', name: 'movies')]
-    public function movieView(Request $request, MovieRepository $movieRepository, PaginatorInterface $paginator): Response
+    public function movies(Request $request, MovieRepository $movieRepository, PaginatorInterface $paginator): Response
     {
         $movies = $movieRepository->findAll();
 
@@ -55,7 +55,7 @@ class MovieController extends AbstractController
             2
         );
 
-        return $this->render('movies/movieView.html.twig', [
+        return $this->render('movies/movies.html.twig', [
             'pagination' => $pagination,
             'form' => $form,
         ]);
@@ -97,5 +97,19 @@ class MovieController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('movies');
+    }
+
+    #[Route('/movies/view/{id}', name: 'movies_view')]
+    public function movieView(int $id, Request $request, MovieRepository $movieRepository, EntityManagerInterface $entityManager): Response
+    {
+        $movie = $movieRepository->find($id);
+
+        if (!$movie) {
+            throw $this->createNotFoundException('Le film n\'existe pas');
+        }
+
+        return $this->render('movies/movieView.html.twig', [
+            'movie' => $movie,
+        ]);
     }
 }
