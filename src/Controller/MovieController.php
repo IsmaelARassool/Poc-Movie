@@ -25,19 +25,58 @@ class MovieController extends AbstractController
             $entityManager->persist($movie);
             $entityManager->flush();
 
-            return $this->redirectToRoute('movies_view');
+            return $this->redirectToRoute('movies');
         }
 
         return $this->render('movies/movieAdd.html.twig', [
             'movieForm' => $form,
         ]);
     }
-    #[Route('/movies', name: 'movies_view')]
+
+    #[Route('/movies', name: 'movies')]
     public function movieView(MovieRepository $movieRepository): Response
     {
         $movies = $movieRepository->findAll();
         return $this->render('movies/movieView.html.twig', [
             'movies' => $movies,
         ]);
+    }
+
+    #[Route('/movies/modify/{id}', name: 'movies_modify')]
+    public function movieModify(int $id, Request $request, MovieRepository $movieRepository, EntityManagerInterface $entityManager): Response
+    {
+        $movie = $movieRepository->find($id);
+
+        if (!$movie) {
+            throw $this->createNotFoundException('Le film n\'existe pas');
+        }
+
+        $form = $this->createForm(MovieFormType::class, $movie);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('movies');
+        }
+
+        return $this->render('movies/movieModify.html.twig', [
+            'movieForm' => $form,
+        ]);
+    }
+
+    #[Route('/movies/delete/{id}', name: 'movies_delete')]
+    public function movieDelete(int $id, MovieRepository $movieRepository, EntityManagerInterface $entityManager): Response
+    {
+        $movie = $movieRepository->find($id);
+
+        if (!$movie) {
+            throw $this->createNotFoundException('Le film n\'existe pas');
+        }
+
+        $entityManager->remove($movie);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('movies');
     }
 }

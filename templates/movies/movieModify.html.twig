@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CRUD Movie{% endblock %}
+
+{% block body %}
+    <h1>Movies modify</h1>
+    {{ form_errors(movieForm) }}
+
+    {{ form_start(movieForm) }}
+        {{ form_row(movieForm.title) }}
+        {{ form_row(movieForm.releaseat) }}
+        {{ form_row(movieForm.synopsis) }}
+        {{ form_row(movieForm.productor) }}
+        {% for movieForm in movieForm.categories %}
+            {{ form_row(movieForm) }}
+        {% endfor %}
+        {{ form_row(movieForm.submit) }}
+    {{ form_end(movieForm) }}
+{% endblock %}

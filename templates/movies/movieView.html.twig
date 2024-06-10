@@ -4,6 +4,7 @@
 
 {% block body %}
     <h1>Movies</h1>
+    <a href={{ path('movies_add') }}>Rajouter un film</a>
     <table border="1">
         <thead>
             <tr>
@@ -12,34 +13,27 @@
                 <th>Date de sortie</th>
                 <th>Synopsis</th>
                 <th>Producteur</th>
+                <th>Catégorie</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                {% for movie in movies %}
+            {% for movie in movies %}
+                <tr>
                     <td>{{ movie.id }}</td>
-                {% endfor %}
-            </tr>
-            <tr>
-                {% for movie in movies %}
                     <td>{{ movie.title }}</td>
-                {% endfor %}
-            </tr>
-            <tr>
-                {% for movie in movies %}
-                    <td>{{ movie.releaseat|date('Y-m-d') }}</td>
-                {% endfor %}
-            </tr>
-            <tr>
-                {% for movie in movies %}
+                    <td>{{ movie.releaseat|date('d-m-Y') }}</td>
                     <td>{{ movie.synopsis }}</td>
-                {% endfor %}
-            </tr>
-            <tr>
-                {% for movie in movies %}
-                    <td>{{ movie.productor }}</td>
-                {% endfor %}
-            </tr>
+                    <td>{{ movie.productor.firstname }} {{ movie.productor.name }}</td>
+                    <td>{% for categorie in movie.categories %}
+                        {{ categorie.title }},
+                    {% endfor %}
+                    <td>
+                        <a href="{{ path('movies_modify', {'id': movie.id}) }}">Modifier</a>
+                        <a href="{{ path('movies_delete', {'id': movie.id}) }}" 
+                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce film ?');">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 {% endblock %}

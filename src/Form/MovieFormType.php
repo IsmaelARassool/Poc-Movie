@@ -53,7 +53,7 @@ class MovieFormType extends AbstractType
             ->add('productor', EntityType::class, [
                 'class' => Productor::class,
                 'choice_label' => function($productor) {
-                    return $productor->getName() . " - " . $productor->getFirstname(); 
+                    return $productor->getFirstname() . " - " . $productor->getName(); 
                 },
                 'label' => 'Producteur :',
                 'required' => true,
