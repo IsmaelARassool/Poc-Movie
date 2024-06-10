@@ -5,8 +5,6 @@ namespace App\Repository;
 use App\Entity\Movie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Knp\Component\Pager\Pagination\PaginationInterface;
-use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @extends ServiceEntityRepository<Movie>
@@ -18,12 +16,10 @@ use Knp\Component\Pager\PaginatorInterface;
  */
 class MovieRepository extends ServiceEntityRepository
 {
-    private $paginator;
 
-    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Movie::class);
-        $this->paginator = $paginator;
     }
 
     public function add(Movie $entity, bool $flush = false): void
@@ -44,22 +40,16 @@ class MovieRepository extends ServiceEntityRepository
         }
     }
 
-    /**
-     * Retrieve paginated movies
-     *
-     * @param int $page
-     * @param int $limit
-     * @return PaginationInterface
-     */
-    public function findPaginatedMovies(int $page, int $limit): PaginationInterface
+    public function filterMovie(string $title = null)
     {
-        $query = $this->createQueryBuilder('m')
-            ->getQuery();
+        $query = $this->createQueryBuilder('r');
 
-        return $this->paginator->paginate(
-            $query,
-            $page,
-            $limit
-        );
+        if ($title != null){
+            $query
+                ->andWhere('r.title LIKE :title')
+                ->setParameter('title', '%' . $title . '%');
+        }
+        
+        return $query->getQuery()->getResult();
     }
 }

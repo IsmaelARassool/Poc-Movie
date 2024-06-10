@@ -5,6 +5,11 @@
 {% block body %}
     <h1>Movies</h1>
     <a href={{ path('movies_add') }}>Rajouter un film</a>
+
+    {{ form_start(form) }}
+        {{ form_row(form.title) }}
+        <button type="submit">Afficher</button>
+    {{ form_end(form) }}
     <table border="1">
         <thead>
             <tr>

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Movie;
 use App\Entity\Productor;
 use App\Form\MovieFormType;
+use App\Form\FilterFormType;
 use App\Repository\MovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -37,14 +38,26 @@ class MovieController extends AbstractController
     #[Route('/movies', name: 'movies')]
     public function movieView(Request $request, MovieRepository $movieRepository, PaginatorInterface $paginator): Response
     {
+        $movies = $movieRepository->findAll();
+
+        $form = $this->createForm(FilterFormType::class, $movies);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $movies = $movieRepository->filterMovie(
+                $form->get('title')->getData(),
+            );
+        }
+
         $pagination = $paginator->paginate(
-            $movieRepository->findAll(),
-            $request->query->getInt('page', 1),
+            $movies,
+            $request->query->get('page', 1),
             2
         );
 
         return $this->render('movies/movieView.html.twig', [
             'pagination' => $pagination,
+            'form' => $form,
         ]);
     }
 
