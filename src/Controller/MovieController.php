@@ -7,6 +7,7 @@ use App\Entity\Productor;
 use App\Form\MovieFormType;
 use App\Repository\MovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,11 +35,16 @@ class MovieController extends AbstractController
     }
 
     #[Route('/movies', name: 'movies')]
-    public function movieView(MovieRepository $movieRepository): Response
+    public function movieView(Request $request, MovieRepository $movieRepository, PaginatorInterface $paginator): Response
     {
-        $movies = $movieRepository->findAll();
+        $pagination = $paginator->paginate(
+            $movieRepository->findAll(),
+            $request->query->getInt('page', 1),
+            2
+        );
+
         return $this->render('movies/movieView.html.twig', [
-            'movies' => $movies,
+            'pagination' => $pagination,
         ]);
     }
 

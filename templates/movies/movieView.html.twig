@@ -17,7 +17,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for movie in movies %}
+            {% for movie in pagination %}
                 <tr>
                     <td>{{ movie.id }}</td>
                     <td>{{ movie.title }}</td>
@@ -36,4 +36,8 @@
             {% endfor %}
         </tbody>
     </table>
+    
+    <div class="pagination">
+        {{ knp_pagination_render(pagination) }}
+    </div>
 {% endblock %}
