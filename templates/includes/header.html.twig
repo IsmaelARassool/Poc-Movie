@@ -1,1 +1,5 @@
-<a href={{ path('app_login') }}>Connexion</a>
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    <a href="{{ path('app_logout') }}">Se deconecter</a>
+{% else %}
+    <a href="{{ path('app_login') }}">Se connecter</a>
+{% endif %}
